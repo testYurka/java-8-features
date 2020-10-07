@@ -5,6 +5,11 @@ import co.inventorsoft.model.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Contains simple cases for trying Stream API in action.
@@ -18,7 +23,11 @@ public class StreamHomework {
      * @return collection of teenagers
      */
     public List<Person> extractTeenagers(final List<Person> people) {
-        return null;
+        return people.stream()
+                .filter(p -> (p.getAge()>=13))
+                .filter(p -> (p.getAge()<=18))
+                .collect(Collectors.toList());
+
     }
 
     /**
@@ -29,7 +38,11 @@ public class StreamHomework {
      * @return collection of user, without duplicates
      */
     public List<User> createUsers(final List<String> emails) {
-        return null;
+        return emails.stream()
+                .distinct()
+                .filter(Objects::nonNull)
+                .map(User::new)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -39,7 +52,10 @@ public class StreamHomework {
      * @return map {user email : user}
      */
     public Map<String, User> groupByEmail(final List<User> users) {
-        return null;
+        return users.stream()
+                .distinct()
+                .collect(Collectors.toMap(User::getEmail, user -> user));
+
     }
 
     /**
@@ -49,7 +65,9 @@ public class StreamHomework {
      * @return map {age : people with this age}
      */
     public Map<Integer, List<Person>> groupByAge(final List<Person> people) {
-        return null;
+
+        return people.stream()
+                .collect(groupingBy(Person::getAge));
     }
 
     /**
@@ -62,6 +80,11 @@ public class StreamHomework {
      * @return string with unique names, like "Distinct names: a, b, c!"
      */
     public String collectDistinctNames(final List<Person> people) {
-        return null;
+       String res =  people.stream()
+                .map(Person::getName)
+               .distinct()
+                .collect(Collectors.joining(", "));
+       return "Distinct names: " + res + "!";
+
     }
 }
